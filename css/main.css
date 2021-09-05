@@ -7,7 +7,6 @@
 body {
     font-family: 'Noto Sans JP', sans-serif;
     text-align: center;
-    /* padding-top: 5rem; */
 }
 
 /* ----------------------------------------------------- */
@@ -17,7 +16,6 @@ body {
 /* ----------------------------------------------------- */
 
 .section {
-    /* margin-top: 50px; */
     padding-top: 50px;
     margin-bottom: 50px;
     display: flex;
@@ -26,7 +24,7 @@ body {
 }
 
 .section div {
-    margin-top: 25px;
+    /* margin-top: 25px; */
     margin-bottom: 20px;
     border-radius: 10px;
 }
@@ -52,6 +50,13 @@ body {
 
 .caption-line-right {
     margin: 0 0 0 5%;
+}
+
+.caption-message{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 /* ----------------------------------------------------- */
@@ -80,10 +85,22 @@ nav {
 
 /* ----------------------------------------------------- */
 
+#top{
+    margin-top: 50px;
+}
+
 #top-content {
     display: flex;
-    flex-direction: row;
     align-items: center;
+    flex-direction: row;
+    
+}
+
+/* スマホ用の上書き */
+@media screen and (max-width: 599px) {
+    #top-content{
+        flex-direction: column;
+    }
 }
 
 #top-image {
@@ -91,8 +108,18 @@ nav {
     width: 300px;
 }
 
+/* スマホ用の上書き */
+@media screen and (max-width: 599px) {
+    #top-image{
+        width: 200px;
+    }
+}
+
 #top-message-parent {
-    margin-left: 50px;
+    margin-left: 5%;
+    margin-right: 5%;
+    display: flex;
+    flex-direction: column;
     text-align: left;
     font-size: large;
 }
@@ -120,9 +147,7 @@ nav {
     margin: 20px;
 }
 
-/* .content div { */
-    /* padding: 10px; */
-/* } */
+
 
 .production-title {
     margin-top: 20px;

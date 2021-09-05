@@ -47,6 +47,10 @@ require_once './php/database_interface.php';
                     </li>
 
                     <li class="navbar-item ml-auto">
+                        <a class="nav-link" href="#skills">Skills</a>
+                    </li>
+
+                    <li class="navbar-item ml-auto">
                         <a class="nav-link" href="#about">About</a>
                     </li>
 
@@ -67,19 +71,18 @@ require_once './php/database_interface.php';
             <div>
                 <img id="top-image" src="./image/my_profile_black_and_white.png" alt="トップイメージ">
             </div>
-            <div id="top-message-parent">
+            <div class="section-message" id="top-message-parent">
 
+                <p>　　　　　　　　　　　　　　　　　</p>
                 <p>はじめまして，酒井と申します</p>
                 <p>見てくださり，ありがとうございます</p>
-                <p>これまでの制作物や経験したことをまとめていますので</p>
+                <p>制作物や経験をまとめています</p>
                 <p>最後まで見て頂ければ幸いです</p>
                 <p>よろしくお願いいたします</p>
+                <p>　　　　　　　　　　　　　　　　　</p>
 
             </div>
         </div>
-        <!-- <div>
-            <img id="next-navigator" src="./image/next_navigator.svg" alt="">
-        </div> -->
     </div>
 
 
@@ -96,6 +99,12 @@ require_once './php/database_interface.php';
             <div class="caption-line caption-line-left"></div>
             <h1>Productions</h1>
             <div class="caption-line caption-line-right"></div>
+
+        </div>
+
+        <div class="caption-message">
+
+            <p>大学入学後からこれまでの作品をまとめています</p>
 
         </div>
 
@@ -144,9 +153,7 @@ require_once './php/database_interface.php';
                             <div class="production-description">
 
                                 <p>
-                                    <?php
-                                    echo $production['description'];
-                                    ?>
+                                    <?php echo $production['description']; ?>
                                 </p>
 
                             </div>
@@ -162,6 +169,26 @@ require_once './php/database_interface.php';
                 ?>
             </div>
         </div>
+    </div>
+
+    <div class="section" id="skills">
+        <!-- 見出し -->
+        <div class="caption">
+
+            <div class="caption-line caption-line-left"></div>
+            <h1>Skills</h1>
+            <div class="caption-line caption-line-right"></div>
+
+        </div>
+
+        <div class="caption-message">
+
+            <p>システム開発に限らず</p>
+            <p>経験したことをまとめています</p>
+
+        </div>
+
+
     </div>
 
 
