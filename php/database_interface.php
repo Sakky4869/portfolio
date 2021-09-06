@@ -4,7 +4,7 @@
 // $db_user   : データベースのユーザ名
 // $db_passwd : データベースのパスワード
 // $db_name   : データベースの名前
-require_once('~/db_conf/db_conf.php');
+require_once('../../db_conf/db_conf.php');
 
 
 function connect_to_db($user, $pass, $db){
