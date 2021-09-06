@@ -185,8 +185,7 @@ require_once './php/database_interface.php';
 
             <p>システム開発に限らず</p>
             <p>経験したことをまとめています</p>
-            <p>現在準備中です</p>
-            <p>1週間ほどお待ちください</p>
+            <p>現在準備中です．1週間ほどお待ちください．</p>
 
         </div>
 
@@ -205,14 +204,6 @@ require_once './php/database_interface.php';
             <div class="caption-line caption-line-left"></div>
             <h1>About</h1>
             <div class="caption-line caption-line-right"></div>
-
-        </div>
-
-        <div class="caption-message">
-
-            <p>僕自身のことやこのサイトについてです</p>
-            <p>現在準備中です</p>
-            <p>1週間ほどお待ちください</p>
 
         </div>
     </div>
