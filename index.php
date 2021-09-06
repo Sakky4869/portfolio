@@ -160,13 +160,49 @@ require_once './php/database_interface.php';
 
                             <!-- 詳細ページへのボタン -->
                             <div class="production-more-info">
-                                <img class="more-info-image" src="./image/more_info.svg" alt="もっと詳しく！">
+                                <img class="more-info-image" src="./image/more_info.svg" alt="もっと詳しく！" data-toggle="modal" data-target="#more-info-modal">
                             </div>
                         </div>
                     </div>
                 <?php
                 }
                 ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="more-info-modal" tabindex="-1" role="dialog" aria-labelledby="label-more-info" aria-hidden="true">
+        
+        <div class="modal-dialog modal-lg" role="document">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title" id="label-more-info"></h5>
+
+                </div>
+
+                <div class="modal-body">
+                    <div style="height: 350px;" id="moreinfo-content">
+                        <p style="font-size: xx-large;">ただいま準備中です</p>
+                        <p>１週間ほどお待ちください</p>
+                        <!-- <div style="display:flex; justify-content: space-around;"> -->
+                        <!-- <?php
+                        for ($i=0; $i < 3; $i++) { 
+                            echo '<img class="comming-soon" style="width: 100px;" src="./image/comming_soon.svg" alt="ただいま準備中です">';
+                            echo '<img class="comming-soon-smile" style="width: 100px;" src="./image/comming_soon_smile.svg" alt="ただいま準備中です">';
+                        }
+                        ?> -->
+                        <!-- </div> -->
+                        <img style="width: 100px;" src="./image/comming_soon.svg" alt="ただいま準備中です">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+                </div>
+
             </div>
         </div>
     </div>
