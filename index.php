@@ -221,6 +221,7 @@ require_once './php/database_interface.php';
 
             <p>システム開発に限らず</p>
             <p>経験したことをまとめています</p>
+            <p>現在準備中です．1週間ほどお待ちください．</p>
 
         </div>
 
