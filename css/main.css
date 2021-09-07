@@ -9,6 +9,37 @@ body {
     text-align: center;
 }
 
+
+
+/* ----------------------------------------------------- */
+
+/* ロード画面の設定 */
+
+/* ----------------------------------------------------- */
+#load-panel{
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    z-index: 1;
+}
+
+#load-text{
+    font-size: large;
+}
+
+.progress{
+    width: 90%;
+}
+
+
+
 /* ----------------------------------------------------- */
 
 /* Top, Production, Aboutなどのセクションごとの設定 */

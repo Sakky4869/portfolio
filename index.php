@@ -15,6 +15,7 @@ require_once './php/database_interface.php';
     <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
     <script src="./js/main.js"></script>
     <link rel="stylesheet" href="./css/main.css">
+    <script src="./js/chart.min.js"></script>
     <!-- フォントデータ -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,7 +24,10 @@ require_once './php/database_interface.php';
 </head>
 
 <body data-spy="scroll" data-target="#navigation-bar" data-offset="100">
+
+    <!-- ------------------------------------------- -->
     <!-- ナビゲーションバー -->
+    <!-- ------------------------------------------- -->
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark stick-top fixed-top" id="navigatoin-bar">
 
         <div class="container">
@@ -33,8 +37,6 @@ require_once './php/database_interface.php';
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
-
-                <!-- <ul class="navbar-nav"></ul> -->
 
                 <ul class="navbar-nav ml-auto">
 
@@ -59,7 +61,9 @@ require_once './php/database_interface.php';
         </div>
     </nav>
 
-
+    <!-- ------------------------------------------- -->
+    <!-- Top -->
+    <!-- ------------------------------------------- -->
 
     <!-- ポートフォリオを開いたときに最初の出てくる部分 -->
     <!-- 自分の画像とか，あいさつ文とかでいいかな -->
@@ -85,7 +89,9 @@ require_once './php/database_interface.php';
         </div>
     </div>
 
-
+    <!-- ------------------------------------------- -->
+    <!-- Productions -->
+    <!-- ------------------------------------------- -->
 
     <!-- これまで作った作品をまとめて紹介 -->
     <!-- グリッドで表示 -->
@@ -168,11 +174,18 @@ require_once './php/database_interface.php';
                 }
                 ?>
             </div>
+
+            <script>
+                // countGoogleDriveLoadEvnet();
+            </script>
         </div>
     </div>
 
+    <!-- ------------------------------------------- -->
+    <!-- 準備中モーダル -->
+    <!-- ------------------------------------------- -->
     <div class="modal fade" id="more-info-modal" tabindex="-1" role="dialog" aria-labelledby="label-more-info" aria-hidden="true">
-        
+
         <div class="modal-dialog modal-lg" role="document">
 
             <div class="modal-content">
@@ -189,11 +202,11 @@ require_once './php/database_interface.php';
                         <p>１週間ほどお待ちください</p>
                         <!-- <div style="display:flex; justify-content: space-around;"> -->
                         <!-- <?php
-                        for ($i=0; $i < 3; $i++) { 
-                            echo '<img class="comming-soon" style="width: 100px;" src="./image/comming_soon.svg" alt="ただいま準備中です">';
-                            echo '<img class="comming-soon-smile" style="width: 100px;" src="./image/comming_soon_smile.svg" alt="ただいま準備中です">';
-                        }
-                        ?> -->
+                                for ($i = 0; $i < 3; $i++) {
+                                    echo '<img class="comming-soon" style="width: 100px;" src="./image/comming_soon.svg" alt="ただいま準備中です">';
+                                    echo '<img class="comming-soon-smile" style="width: 100px;" src="./image/comming_soon_smile.svg" alt="ただいま準備中です">';
+                                }
+                                ?> -->
                         <!-- </div> -->
                         <img style="width: 100px;" src="./image/comming_soon.svg" alt="ただいま準備中です">
                     </div>
@@ -207,6 +220,9 @@ require_once './php/database_interface.php';
         </div>
     </div>
 
+    <!-- ------------------------------------------- -->
+    <!-- Skills -->
+    <!-- ------------------------------------------- -->
     <div class="section" id="skills">
         <!-- 見出し -->
         <div class="caption">
@@ -223,6 +239,58 @@ require_once './php/database_interface.php';
             <p>経験したことをまとめています</p>
             <p>現在準備中です</p>
             <p>1週間ほどお待ちください．</p>
+
+        </div>
+
+        <!-- スキルをカテゴリごとにレーダーチャートで表示する -->
+        <!-- レーダーチャートはグリッドで一覧表示する -->
+        <div class="container-fluid">
+
+            <div class="row">
+
+                <div class="col-xs-12 col-sm-12 col-md-<?php echo $col_size ?> col-lg-<?php echo $col_size ?> col-xl-<?php echo $col_size ?> content-box">
+
+                    <div class="chart-box content" style="position: relative; width: 300px; height: 300px;">
+
+                        <!-- チャートを作成するcanvasを用意 -->
+                        <canvas id="myChart"></canvas>
+
+                        <script>
+                            let ctx = document.getElementById('myChart').getContext('2d');
+                            const NUMBER_CFG = {
+                                count: 7,
+                                min: 0,
+                                max: 100
+                            };
+
+                            let myChart = new Chart(ctx, {
+                                type: 'radar',
+                                data: {
+                                    labels: ['1', '2', '3', '4', '5', '6', '7'],
+                                    datasets: [{
+                                        labels: 'data set 1',
+                                        data: [10, 20, 30, 40, 50, 60, 70],
+                                        borderColor: 'rgba(255, 255, 255, 255)',
+                                        backgroundColor: 'rgba(255, 0, 0, 5)'
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    plugins: {
+                                        title: {
+                                            display: true,
+                                            text: 'Sample Chart'
+                                        }
+                                    }
+                                }
+                            });
+                        </script>
+                    </div>
+                </div>
+
+            </div>
+
+
 
         </div>
 
@@ -250,6 +318,17 @@ require_once './php/database_interface.php';
             <p>現在準備中です</p>
             <p>1週間ほどお待ちください</p>
 
+        </div>
+    </div>
+
+    <!-- ページのロード中に表示する画面 -->
+    <div id="load-panel">
+        <div id="load-text">
+            コンテンツ読み込み中
+        </div>
+        <div class="progress">
+            <div id="load-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0%" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+            </div>
         </div>
     </div>
 
