@@ -111,6 +111,7 @@ require_once './php/database_interface.php';
         <div class="caption-message">
 
             <p>大学入学後からこれまでの作品をまとめています</p>
+            <p>動画再生推奨ブラウザ：Chrome</p>
 
         </div>
 
@@ -176,7 +177,6 @@ require_once './php/database_interface.php';
             </div>
 
             <script>
-                // countGoogleDriveLoadEvnet();
             </script>
         </div>
     </div>
@@ -200,14 +200,12 @@ require_once './php/database_interface.php';
                     <div style="height: 350px;" id="moreinfo-content">
                         <p style="font-size: xx-large;">ただいま準備中です</p>
                         <p>１週間ほどお待ちください</p>
-                        <!-- <div style="display:flex; justify-content: space-around;"> -->
-                        <!-- <?php
-                                for ($i = 0; $i < 3; $i++) {
-                                    echo '<img class="comming-soon" style="width: 100px;" src="./image/comming_soon.svg" alt="ただいま準備中です">';
-                                    echo '<img class="comming-soon-smile" style="width: 100px;" src="./image/comming_soon_smile.svg" alt="ただいま準備中です">';
-                                }
-                                ?> -->
-                        <!-- </div> -->
+                        <?php
+                        for ($i = 0; $i < 3; $i++) {
+                            echo '<img class="comming-soon" style="width: 100px;" src="./image/comming_soon.svg" alt="ただいま準備中です">';
+                            echo '<img class="comming-soon-smile" style="width: 100px;" src="./image/comming_soon_smile.svg" alt="ただいま準備中です">';
+                        }
+                        ?>
                         <img style="width: 100px;" src="./image/comming_soon.svg" alt="ただいま準備中です">
                     </div>
                 </div>
@@ -250,10 +248,12 @@ require_once './php/database_interface.php';
 
                 <div class="col-xs-12 col-sm-12 col-md-<?php echo $col_size ?> col-lg-<?php echo $col_size ?> col-xl-<?php echo $col_size ?> content-box">
 
-                    <div class="chart-box content" style="position: relative; width: 300px; height: 300px;">
+                <div class="chart-box content">
 
                         <!-- チャートを作成するcanvasを用意 -->
                         <canvas id="myChart"></canvas>
+
+                        <p>スキルを示すグラフ</p>
 
                         <script>
                             let ctx = document.getElementById('myChart').getContext('2d');
