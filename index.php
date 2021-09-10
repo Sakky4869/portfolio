@@ -13,9 +13,9 @@ require_once './php/database_interface.php';
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <script src="./js/jquery-3.3.1.slim.min.js"></script>
     <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
-    <script src="./js/main.js"></script>
     <link rel="stylesheet" href="./css/main.css">
     <script src="./js/chart.min.js"></script>
+    <script src="./js/main.js"></script>
     <!-- フォントデータ -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -246,47 +246,40 @@ require_once './php/database_interface.php';
 
             <div class="row">
 
-                <div class="col-xs-12 col-sm-12 col-md-<?php echo $col_size ?> col-lg-<?php echo $col_size ?> col-xl-<?php echo $col_size ?> content-box">
+                <?php
+                // スキルデータをオブジェクトとして取得
+                $skills_object = get_skill_datas(connect_to_db($db_user, $db_passwd, $db_name));
+                $kinds = array_keys($skills_object);
 
-                <div class="chart-box content">
+                // ジャンルごとのデータを取得
+                for ($i = 0; $i < count($kinds); $i++) {
+                    $languages = array_keys($skills_object[$kinds[$i]]);
+                ?>
 
-                        <!-- チャートを作成するcanvasを用意 -->
-                        <canvas id="myChart"></canvas>
+                    <div class="col-xs-12 col-sm-12 col-md-<?php echo $col_size ?> col-lg-<?php echo $col_size ?> col-xl-<?php echo $col_size ?> content-box">
 
-                        <p>スキルを示すグラフ</p>
+                        <div class="chart-box content">
 
-                        <script>
-                            let ctx = document.getElementById('myChart').getContext('2d');
-                            const NUMBER_CFG = {
-                                count: 7,
-                                min: 0,
-                                max: 100
-                            };
+                            <!-- チャートを作成するcanvasを用意 -->
+                            <!-- <canvas id="myChart"></canvas> -->
+                            <!-- チャートを作成するcanvasを用意 -->
+                            <canvas class="skill-chart" data-kind="<?php echo $kinds[$i]; ?>"></canvas>
 
-                            let myChart = new Chart(ctx, {
-                                type: 'radar',
-                                data: {
-                                    labels: ['1', '2', '3', '4', '5', '6', '7'],
-                                    datasets: [{
-                                        labels: 'data set 1',
-                                        data: [10, 20, 30, 40, 50, 60, 70],
-                                        borderColor: 'rgba(255, 255, 255, 255)',
-                                        backgroundColor: 'rgba(255, 0, 0, 5)'
-                                    }]
-                                },
-                                options: {
-                                    responsive: true,
-                                    plugins: {
-                                        title: {
-                                            display: true,
-                                            text: 'Sample Chart'
-                                        }
-                                    }
-                                }
-                            });
-                        </script>
+                            <p>５：</p>
+
+
+                            <!-- 詳細ページへのボタン -->
+                            <div class="production-more-info">
+                                <img class="more-info-image" src="./image/more_info.svg" alt="もっと詳しく！" data-toggle="modal" data-target="#more-info-modal">
+                            </div>
+                        </div>
                     </div>
-                </div>
+
+
+                <?php
+
+                }
+                ?>
 
             </div>
 
@@ -334,6 +327,20 @@ require_once './php/database_interface.php';
 
     <script src="./js/popper.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
+
+    <?php
+    // スキルデータをJSON文字列として取得
+    $skills_json = get_skill_datas_json(connect_to_db($db_user, $db_passwd, $db_name));
+    ?>
+
+    <script type="text/javascript">
+        // JavaScriptで使うために，JavaScriptのJSONオブジェクトとして保持
+        let skills_json_string = <?php echo "'" . $skills_json . "'"; ?>;
+        let skills_json_object = JSON.parse(skills_json_string);
+        // console.log(skills_json_object);
+        // createSkillCharts(skills_json_object);
+    </script>
+
 </body>
 
 </html>

@@ -1,25 +1,11 @@
 
-/**
- * 謝罪イメージの表示モード
- * １：お辞儀画像表示
- * ０：スマイル画像表示
- */
-let commingSoonMode = 1;
 
 let sections = null;
 
-// Google Driveのiframeコンテンツのロード検知について
-// PHPでGoogle Driveコンテンツを出力したあとに，jsでiframe要素の数を取得し，
-// 全iframe要素に対して，読み込み完了イベントであるloadイベントにカウント関数を設定
-// カウント関数の処理内容は，ロードが完了したiframe要素の数をカウントする
-// すべてロードできたらWebページを表示する
 
 window.onload = function () {
-    // countGoogleDriveLoadEvent();
-    // setAllSectionsDisplay('none');
     window.scrollTo(0, 0);
-    // setInterval(switchCommingSoonImage, 1000);
-
+    createSkillCharts(skills_json_object);
 };
 
 document.addEventListener('DOMContentLoaded', event => {
@@ -27,44 +13,73 @@ document.addEventListener('DOMContentLoaded', event => {
     countGoogleDriveLoadEvent();
 });
 
+
+function createSkillCharts(skill_datas){
+    let chartCanvasList = document.getElementsByClassName('skill-chart');
+    for (let i = 0; i < chartCanvasList.length; i++) {
+        let chartCanvas = chartCanvasList[i];
+        let ctx = chartCanvas.getContext('2d');
+        let kind = chartCanvas.dataset.kind;
+        let evaluateData = skill_datas[kind];
+        // console.log(evaluateData);
+        let keys = Object.keys(evaluateData);
+        let values = Object.values(evaluateData);
+        let chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: keys,
+                datasets: [{
+                    label: kind,
+                    data: values,
+                    borderColor: 'rgba(255, 255, 255, 255)',
+                    backgroundColor: 'rgba(255, 0, 0, 5)'
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'test'
+                }
+            }
+        });
+        // let labels = [];
+        // let datas = [];
+        // for (let j = 0; j < keys.length; j++) {
+        //     let key = keys[j];
+            
+        // }
+        
+    }
+    // console.log('chart canvas count : ' +chartCanvasList.length);
+    // console.log(skill_datas);
+}
+
+/**
+ * すべてのsectionの表示非表示を切り替える
+ * @param {string} state 表示するかしないか
+ */
 function setAllSectionsDisplay(state){
     if(sections == null){
         sections = document.getElementsByClassName('section');
     }else{
-        console.log(sections.length);
+        // console.log(sections.length);
     }
     for (let i = 0; i < sections.length; i++) {
         let section = sections[i];
         section.style.display = state;
-        console.log('section ' + section.id + ' set ' + state);
+        // console.log('section ' + section.id + ' set ' + state);
     }
 }
 
-// const switchCommingSoonImage = function () {
 
-//     // お辞儀画像取得
-//     let sorryImages = document.getElementsByClassName('comming-soon');
-
-//     // 表示切替
-//     for (let i = 0; i < sorryImages.length; i++) {
-//         let sorryImage = sorryImages[i];
-//         sorryImage.style.display = (commingSoonMode == 1) ? 'inline' : 'none';
-//     }
-
-//     // スマイル画像取得
-//     let smileImages = document.getElementsByClassName('comming-soon-smile');
-
-//     // 表示切替
-//     for (let i = 0; i < smileImages.length; i++) {
-//         let smileImage = smileImages[i];
-//         smileImage.style.display = (commingSoonMode == 1) ? 'none' : 'inline';
-//     }
-
-//     commingSoonMode = 1 - commingSoonMode;
-
-// };
-
-
+/**
+ * ロードが完了したiframeの数をカウントする
+ */
 function countGoogleDriveLoadEvent(){
     // 全てのGoogle Drive iframeを取得
     let iframes = document.getElementsByTagName('iframe');
@@ -75,7 +90,7 @@ function countGoogleDriveLoadEvent(){
         // iframeのloadイベントを追加
         iframe.onload = () => {
             loadedCount += 1;
-            console.log('ロード完了：' + (i + 1) + ' / ' + iframes.length);
+            // console.log('ロード完了：' + (i + 1) + ' / ' + iframes.length);
             if(loadedCount == iframes.length){
                 console.log('全iframeロード完了');
             }
@@ -85,6 +100,11 @@ function countGoogleDriveLoadEvent(){
     }
 };
 
+/**
+ * ロードが完了したiframeの数に応じてロード画面の状態を変える
+ * @param {int} count ロードが完了したiframeの数
+ * @param {int} max iframeの総数
+ */
 function setProgressBarValue(count, max){
     // プログレスバーを取得
     let progressBar = document.getElementById('load-progress-bar');
