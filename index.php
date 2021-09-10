@@ -265,9 +265,6 @@ require_once './php/database_interface.php';
                             <!-- チャートを作成するcanvasを用意 -->
                             <canvas class="skill-chart" data-kind="<?php echo $kinds[$i]; ?>"></canvas>
 
-                            <p>５：</p>
-
-
                             <!-- 詳細ページへのボタン -->
                             <div class="production-more-info">
                                 <img class="more-info-image" src="./image/more_info.svg" alt="もっと詳しく！" data-toggle="modal" data-target="#more-info-modal">
