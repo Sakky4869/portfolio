@@ -6,6 +6,18 @@ let sections = null;
 window.onload = function () {
     window.scrollTo(0, 0);
     createSkillCharts(skills_json_object);
+
+    let productionMoreInfoButtonArray = document.getElementsByClassName('production-more-info');
+    // console.log(productionMoreInfoButtonArray);
+    for(let i = 0 ; i < productionMoreInfoButtonArray.length; i++){
+        productionMoreInfoButtonArray[i].addEventListener('click', function (e) {
+            // console.log(productionDatas[i]['detail']);
+            document.getElementById('label-more-info').innerHTML = productionDatas[i]['title'];
+            document.getElementById('moreinfo-content').innerHTML = marked(productionDatas[i]['detail']);
+            // $('#label-more-info').val(productionDatas[i]['title']);
+            // $('#moreinfo-content').val(productionDatas[i]['detail']);
+        });
+    }
 };
 
 document.addEventListener('DOMContentLoaded', event => {
@@ -29,10 +41,11 @@ function createSkillCharts(skill_datas){
             data: {
                 labels: keys,
                 datasets: [{
-                    label: kind,
+                    label: 'レベル',
                     data: values,
                     borderColor: 'rgba(255, 255, 255, 255)',
-                    backgroundColor: 'rgba(255, 0, 0, 5)'
+                    // backgroundColor: 'rgba(255, 0, 0, 5)'
+                    backgroundColor: '#7c7c7c',
                 }]
             },
             options: {
@@ -41,12 +54,18 @@ function createSkillCharts(skill_datas){
                         beginAtZero: true
                     }
                 },
+                maxBarThickness: 50,
                 title: {
                     display: true,
                     text: 'test'
                 }
             }
         });
+
+        // チャートのタイトルを設定
+        let chartTitle = chartCanvas.parentElement.children[0];
+        chartTitle.innerText = kind;
+
         // let labels = [];
         // let datas = [];
         // for (let j = 0; j < keys.length; j++) {
@@ -58,6 +77,7 @@ function createSkillCharts(skill_datas){
     // console.log('chart canvas count : ' +chartCanvasList.length);
     // console.log(skill_datas);
 }
+
 
 /**
  * すべてのsectionの表示非表示を切り替える

@@ -1,7 +1,12 @@
 <?php
 ini_set('display_errors', 1);
 require_once './php/database_interface.php';
+$production_datas = get_production_datas(connect_to_db($db_user, $db_passwd, $db_name));
+$production_datas_string = json_encode($production_datas, JSON_UNESCAPED_UNICODE);
 ?>
+
+
+
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -14,6 +19,7 @@ require_once './php/database_interface.php';
     <script src="./js/jquery-3.3.1.slim.min.js"></script>
     <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="./css/main.css">
+    <script src="./js/marked.min.js"></script>
     <script src="./js/chart.min.js"></script>
     <script src="./js/main.js"></script>
     <!-- フォントデータ -->
@@ -21,6 +27,10 @@ require_once './php/database_interface.php';
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
     <title>Sakai's Portfolio</title>
+    <script>
+        let productionDatas = <?php echo $production_datas_string; ?>;
+        // console.log(productionDatas);
+    </script>
 </head>
 
 <body data-spy="scroll" data-target="#navigation-bar" data-offset="100">
@@ -186,27 +196,27 @@ require_once './php/database_interface.php';
     <!-- ------------------------------------------- -->
     <div class="modal fade" id="more-info-modal" tabindex="-1" role="dialog" aria-labelledby="label-more-info" aria-hidden="true">
 
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog modal-xl" role="document">
 
             <div class="modal-content">
 
                 <div class="modal-header">
 
-                    <h5 class="modal-title" id="label-more-info"></h5>
+                    <h3 class="modal-title" id="label-more-info"></h3>
 
                 </div>
 
                 <div class="modal-body">
-                    <div style="height: 350px;" id="moreinfo-content">
-                        <p style="font-size: xx-large;">ただいま準備中です</p>
-                        <p>１週間ほどお待ちください</p>
+                    <div id="moreinfo-content">
+                        <!-- <p style="font-size: xx-large;">ただいま準備中です</p> -->
+                        <!-- <p>１週間ほどお待ちください</p> -->
                         <?php
-                        for ($i = 0; $i < 3; $i++) {
-                            echo '<img class="comming-soon" style="width: 100px;" src="./image/comming_soon.svg" alt="ただいま準備中です">';
-                            echo '<img class="comming-soon-smile" style="width: 100px;" src="./image/comming_soon_smile.svg" alt="ただいま準備中です">';
-                        }
+                        // for ($i = 0; $i < 1; $i++) {
+                            // echo '<img class="comming-soon" style="width: 100px;" src="./image/comming_soon.svg" alt="ただいま準備中です">';
+                            // echo '<img class="comming-soon-smile" style="width: 100px;" src="./image/comming_soon_smile.svg" alt="ただいま準備中です">';
+                        // }
                         ?>
-                        <img style="width: 100px;" src="./image/comming_soon.svg" alt="ただいま準備中です">
+                        <!-- <img style="width: 100px;" src="./image/comming_soon.svg" alt="ただいま準備中です"> -->
                     </div>
                 </div>
 
@@ -233,10 +243,18 @@ require_once './php/database_interface.php';
 
         <div class="caption-message">
 
-            <p>システム開発に限らず</p>
-            <p>経験したことをまとめています</p>
-            <p>現在準備中です</p>
-            <p>1週間ほどお待ちください．</p>
+            <p>システム開発経験をまとめています</p>
+            <p>指標は下記です</p>
+            <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                <p>５：調べなくてもある程度作れる</p>
+                <p>４：調べながらなんか作れる</p>
+                <p>３：調べなくても基本的なコードがかける</p>
+                <p>２：調べながら基本的なコードをかける</p>
+                <p>１：授業などで軽く触った程度</p>
+            </div>
+
+            <!-- <p>現在準備中です</p> -->
+            <!-- <p>1週間ほどお待ちください．</p> -->
 
         </div>
 
@@ -259,6 +277,7 @@ require_once './php/database_interface.php';
                     <div class="col-xs-12 col-sm-12 col-md-<?php echo $col_size ?> col-lg-<?php echo $col_size ?> col-xl-<?php echo $col_size ?> content-box">
 
                         <div class="chart-box content">
+                            <div class="production-title"></div>
 
                             <!-- チャートを作成するcanvasを用意 -->
                             <!-- <canvas id="myChart"></canvas> -->
@@ -266,7 +285,7 @@ require_once './php/database_interface.php';
                             <canvas class="skill-chart" data-kind="<?php echo $kinds[$i]; ?>"></canvas>
 
                             <!-- 詳細ページへのボタン -->
-                            <div class="production-more-info">
+                            <div class="skill-more-info">
                                 <img class="more-info-image" src="./image/more_info.svg" alt="もっと詳しく！" data-toggle="modal" data-target="#more-info-modal">
                             </div>
                         </div>
@@ -314,7 +333,7 @@ require_once './php/database_interface.php';
     <!-- ページのロード中に表示する画面 -->
     <div id="load-panel">
         <div id="load-text">
-            コンテンツ読み込み中
+                iframe読み込み中
         </div>
         <div class="progress">
             <div id="load-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0%" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
