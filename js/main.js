@@ -9,7 +9,7 @@ window.onload = function () {
 
     let productionMoreInfoButtonArray = document.getElementsByClassName('production-more-info');
     // console.log(productionMoreInfoButtonArray);
-    for(let i = 0 ; i < productionMoreInfoButtonArray.length; i++){
+    for (let i = 0; i < productionMoreInfoButtonArray.length; i++) {
         productionMoreInfoButtonArray[i].addEventListener('click', function (e) {
             // console.log(productionDatas[i]['detail']);
             document.getElementById('label-more-info').innerHTML = productionDatas[i]['title'];
@@ -18,7 +18,28 @@ window.onload = function () {
             // $('#moreinfo-content').val(productionDatas[i]['detail']);
         });
     }
-};
+    // console.log(Object.keys(skills_json_object));
+    let skillKindArray = Object.keys(skills_json_object);
+
+    let skillMoreInfoButtonArray = document.getElementsByClassName('skill-more-info');
+    for (let i = 0; i < skillMoreInfoButtonArray.length; i++) {
+        skillMoreInfoButtonArray[i].addEventListener('click', function (e) {
+
+            // let skillKind = skillDatas[i]['skill_kind'];
+            let skillKind = skillKindArray[i];
+            // console.log(skillKind);
+            document.getElementById('label-more-info').innerHTML = skillKind;
+            let markdownString = '';
+            for (let j = 0; j < skillDatas.length; j++) {
+                if (skillDatas[j]['skill_kind'] == skillKind) {
+                    markdownString += skillDatas[j]['skill_details'] + '\n\n';
+                }
+            }
+            // document.getElementById('moreinfo-content').innerHTML = marked(skillDatas[i]['skill_details']);
+            document.getElementById('moreinfo-content').innerHTML = marked(markdownString);
+        });
+    }
+}
 
 document.addEventListener('DOMContentLoaded', event => {
     setAllSectionsDisplay('none');
@@ -26,12 +47,14 @@ document.addEventListener('DOMContentLoaded', event => {
 });
 
 
-function createSkillCharts(skill_datas){
+function createSkillCharts(skill_datas) {
+    // console.log(skill_datas);
     let chartCanvasList = document.getElementsByClassName('skill-chart');
     for (let i = 0; i < chartCanvasList.length; i++) {
         let chartCanvas = chartCanvasList[i];
         let ctx = chartCanvas.getContext('2d');
         let kind = chartCanvas.dataset.kind;
+        // console.log(kind);
         let evaluateData = skill_datas[kind];
         // console.log(evaluateData);
         let keys = Object.keys(evaluateData);
@@ -70,9 +93,9 @@ function createSkillCharts(skill_datas){
         // let datas = [];
         // for (let j = 0; j < keys.length; j++) {
         //     let key = keys[j];
-            
+
         // }
-        
+
     }
     // console.log('chart canvas count : ' +chartCanvasList.length);
     // console.log(skill_datas);
@@ -83,10 +106,10 @@ function createSkillCharts(skill_datas){
  * すべてのsectionの表示非表示を切り替える
  * @param {string} state 表示するかしないか
  */
-function setAllSectionsDisplay(state){
-    if(sections == null){
+function setAllSectionsDisplay(state) {
+    if (sections == null) {
         sections = document.getElementsByClassName('section');
-    }else{
+    } else {
         // console.log(sections.length);
     }
     for (let i = 0; i < sections.length; i++) {
@@ -100,7 +123,7 @@ function setAllSectionsDisplay(state){
 /**
  * ロードが完了したiframeの数をカウントする
  */
-function countGoogleDriveLoadEvent(){
+function countGoogleDriveLoadEvent() {
     // 全てのGoogle Drive iframeを取得
     let iframes = document.getElementsByTagName('iframe');
     let loadedCount = 0;
@@ -111,12 +134,12 @@ function countGoogleDriveLoadEvent(){
         iframe.onload = () => {
             loadedCount += 1;
             // console.log('ロード完了：' + (i + 1) + ' / ' + iframes.length);
-            if(loadedCount == iframes.length){
+            if (loadedCount == iframes.length) {
                 console.log('全iframeロード完了');
             }
             setProgressBarValue(loadedCount, iframes.length);
         };
-        
+
     }
 };
 
@@ -125,7 +148,7 @@ function countGoogleDriveLoadEvent(){
  * @param {int} count ロードが完了したiframeの数
  * @param {int} max iframeの総数
  */
-function setProgressBarValue(count, max){
+function setProgressBarValue(count, max) {
     // プログレスバーを取得
     let progressBar = document.getElementById('load-progress-bar');
 
@@ -136,12 +159,12 @@ function setProgressBarValue(count, max){
     progressBar.style.width = progress + '%';
     progressBar.setAttribute('aria-valuenow', progress);
     progressBar.innerText = progress + '%';
-    
+
     // プログレスが100%になったら，ロード画面を非表示にする
-    if(progress == 100){
+    if (progress == 100) {
         document.getElementById('load-panel').style.display = 'none';
         setAllSectionsDisplay('flex');
-        
+
     }
 }
 

@@ -3,6 +3,11 @@ ini_set('display_errors', 1);
 require_once './php/database_interface.php';
 $production_datas = get_production_datas(connect_to_db($db_user, $db_passwd, $db_name));
 $production_datas_string = json_encode($production_datas, JSON_UNESCAPED_UNICODE);
+$skill_datas = get_skill_datas(connect_to_db($db_user, $db_passwd, $db_name));
+// var_dump($skill_datas);
+$skill_datas_string = json_encode($skill_datas, JSON_UNESCAPED_UNICODE);
+// スキルデータをグラフ描画用にJSON文字列として取得
+$skills_json = get_skill_datas_json_for_chart(connect_to_db($db_user, $db_passwd, $db_name));
 ?>
 
 
@@ -29,6 +34,11 @@ $production_datas_string = json_encode($production_datas, JSON_UNESCAPED_UNICODE
     <title>Sakai's Portfolio</title>
     <script>
         let productionDatas = <?php echo $production_datas_string; ?>;
+        let skillDatas = <?php echo $skill_datas_string; ?>;
+        // JavaScriptで使うために，JavaScriptのJSONオブジェクトとして保持
+        let skills_json_string = <?php echo "'" . $skills_json . "'"; ?>;
+        // console.log(skills_json_string);
+        let skills_json_object = JSON.parse(skills_json_string);
         // console.log(productionDatas);
     </script>
 </head>
@@ -266,12 +276,15 @@ $production_datas_string = json_encode($production_datas, JSON_UNESCAPED_UNICODE
 
                 <?php
                 // スキルデータをオブジェクトとして取得
-                $skills_object = get_skill_datas(connect_to_db($db_user, $db_passwd, $db_name));
+                $skills_object = get_skill_datas_for_chart(connect_to_db($db_user, $db_passwd, $db_name));
+                // var_dump($skills_object);
                 $kinds = array_keys($skills_object);
+                // var_dump($kinds);
 
                 // ジャンルごとのデータを取得
                 for ($i = 0; $i < count($kinds); $i++) {
                     $languages = array_keys($skills_object[$kinds[$i]]);
+                    // var_dump($languages);
                 ?>
 
                     <div class="col-xs-12 col-sm-12 col-md-<?php echo $col_size ?> col-lg-<?php echo $col_size ?> col-xl-<?php echo $col_size ?> content-box">
@@ -345,14 +358,15 @@ $production_datas_string = json_encode($production_datas, JSON_UNESCAPED_UNICODE
     <script src="./js/bootstrap.min.js"></script>
 
     <?php
-    // スキルデータをJSON文字列として取得
-    $skills_json = get_skill_datas_json(connect_to_db($db_user, $db_passwd, $db_name));
+    // スキルデータをグラフ描画用にJSON文字列として取得
+    // $skills_json = get_skill_datas_json_for_chart(connect_to_db($db_user, $db_passwd, $db_name));
     ?>
 
     <script type="text/javascript">
         // JavaScriptで使うために，JavaScriptのJSONオブジェクトとして保持
-        let skills_json_string = <?php echo "'" . $skills_json . "'"; ?>;
-        let skills_json_object = JSON.parse(skills_json_string);
+        // let skills_json_string = <?php //echo "'" . $skills_json . "'"; ?>;
+        // console.log(skills_json_string);
+        // let skills_json_object = JSON.parse(skills_json_string);
         // console.log(skills_json_object);
         // createSkillCharts(skills_json_object);
     </script>

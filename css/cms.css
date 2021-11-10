@@ -50,8 +50,24 @@ form input{
     align-items: flex-start;
     border: 1px solid #ced4da;
     padding: 20px;
+    text-align: left;
 }
 
 #production-details-preview-div{
+    text-align: left;
+}
+
+#skill-details-preview-div{
+    width: 100%;
+    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border: 1px solid #ced4da;
+    padding: 20px;
+    text-align: left;
+}
+
+#skill-details-preview-div{
     text-align: left;
 }

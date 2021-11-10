@@ -65,6 +65,7 @@ function get_production_datas($link)
 
 
 
+
 /**
  * 制作物の全データを取得
  *
@@ -117,15 +118,47 @@ function get_skill_datas($link)
     $return_array = array();
 
     while ($row = $result->fetch_assoc()) {
-        if (isset($return_array[$row['kind']]) == false) {
-            $return_array[$row['kind']] = [];
-        }
-        $return_array[$row['kind']][$row['language']] = $row['value'];
+        $data = array();
+        $data['skill_name'] = $row['language'];
+        $data['skill_level'] = $row['value'];
+        $data['skill_kind'] = $row['kind'];
+        $data['skill_details'] = $row['skill_details'];
+        array_push($return_array, $data);
+        // if (isset($return_array[$row['kind']]) == false) {
+        //     $return_array[$row['kind']] = [];
+        // }
+        // $return_array[$row['kind']][$row['language']] = $row['value'];
     }
 
     $link->close();
 
     return $return_array;
+}
+
+function get_skill_datas_for_chart($link){
+     // クエリ
+     $query = "select * from portfolio_skills";
+
+     $result = $link->query($query);
+ 
+     $return_array = array();
+ 
+     while ($row = $result->fetch_assoc()) {
+        //  $data = array();
+        //  $data['skill_name'] = $row['language'];
+        //  $data['skill_level'] = $row['value'];
+        //  $data['skill_kind'] = $row['kind'];
+        //  $data['skill_details'] = $row['skill_details'];
+        //  array_push($return_array, $data);
+         if (isset($return_array[$row['kind']]) == false) {
+             $return_array[$row['kind']] = [];
+         }
+         $return_array[$row['kind']][$row['language']] = $row['value'];
+     }
+ 
+     $link->close();
+ 
+     return $return_array;
 }
 
 /**
@@ -134,9 +167,9 @@ function get_skill_datas($link)
  * @param mysqli $link データベースへの接続オブジェクト
  * @return string スキルデータのJSON文字列
  */
-function get_skill_datas_json($link)
+function get_skill_datas_json_for_chart($link)
 {
-    $result = get_skill_datas($link);
+    $result = get_skill_datas_for_chart($link);
     return json_encode($result, JSON_UNESCAPED_UNICODE);
 }
 
@@ -322,6 +355,100 @@ function update_production_data($link, $title, $description, $movie, $production
     return false;
 }
 
+function insert_skill_data($link, $skill_language, $skill_level, $skill_kind, $skill_details){
+    $query = "insert into portfolio_skills values(null, ?, ?, ?, ?);";
+
+    // $query = "select * from portfolio_cms_authentication where user_name=? and passwd=?";
+    if ($statement = $link->prepare($query)) {
+        // パラメータをバインド
+        $statement->bind_param("ssss", $skill_language, $skill_level, $skill_kind, $skill_details);
+
+        // 実行
+        $statement->execute();
+
+        // 結果をバインド
+        $statement->store_result();
+
+        // echo $statement->get_result();
+        // echo "result : " . $statement->num_rows . "\n";
+
+        $link->close();
+    }else{
+        echo $link->error . "\n";
+    }
+    
+}
+
+function update_skill_data($link, $skill_language, $skill_level, $skill_kind, $skill_details){
+    // クエリ
+    $query = "update portfolio_skills set ";
+
+    $is_first_variable = true;
+    
+    $bind_mark = '';
+    $bind_param_array = array();
+    
+    if($skill_level != ''){
+        $query .= 'value=?';
+        $is_first_variable = false;
+        $bind_mark .= 's';
+        array_push($bind_param_array, $skill_level);
+    }
+    
+    if($skill_kind != ''){
+        
+        $query .=  ($is_first_variable) ? ' ' : ', ' . 'kind=?';
+        $is_first_variable = false;
+        $bind_mark .= 's';
+        array_push($bind_param_array, $skill_kind);
+    }
+
+    if($skill_details != ''){
+        $query .=  ($is_first_variable) ? ' ' : ', ' . 'skill_details=?';
+        $bind_mark .= 's';
+        array_push($bind_param_array, $skill_details);
+    }
+
+    $query .= ' where language=?;';
+
+    // echo $query . "\n";
+
+    $bind_mark .= 's';
+    array_push($bind_param_array, $skill_language);
+
+    // var_dump($bind_mark);
+    // var_dump($bind_param_array);
+
+ 
+    if ($statement = $link->prepare($query)) {
+
+        // echo $statement->error . "\n";
+
+        // echo 'prepare' . "\n";
+
+        // パラメータをバインド
+        $statement->bind_param($bind_mark, ...$bind_param_array);
+
+        // echo 'bind' . "\n";
+
+        // 実行
+        $statement->execute();
+
+        // echo 'execute' . "\n";
+
+        // 結果をバインド
+        $statement->store_result();
+
+        // echo $statement->get_result();
+        // すでにタイトルが登録されていれば，falseを返す
+
+        $link->close();
+        return true;
+    }
+
+    return false;
+}
+
 
 /**
  * CMSサービスへの認証
@@ -357,7 +484,7 @@ function authenticate($link, $user_name, $passwd)
 
 // ---- ここから先は実行テスト ----
 
-// var_dump(insert_production_data(connect_to_db('sakai', 'tyoshino', 'sakai'), 'Test', 'descripton', 'movie', 'detials'));
+// var_dump(get_skill_datas_json_for_chart(connect_to_db('sakai', 'tyoshino', 'sakai')));
 
 // $ret = authenticate(connect_to_db($db_user, $db_passwd, $db_name), 'sakai', 'jcjPortfolioCMS4869');
 // if($ret == true){

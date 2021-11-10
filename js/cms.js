@@ -35,6 +35,9 @@ $(document).ready(function () {
     // 最初は非表示に設定
     skillNameText.css('display', 'none');
 
+    // スキルのレベルを選択するselect
+    let skillLevelSelect = $('#skill-level-select');
+
     // スキルの種類を選択するselect
     let skillKindSelect = $('#skill-kind-select');
 
@@ -44,6 +47,11 @@ $(document).ready(function () {
     // 最初は非表示に設定
     skillKindText.css('display', 'none');
 
+    // スキルの詳細情報のプレビューdiv
+    let skillDetailsPreviewDiv = $('#skill-details-preview-div');
+
+    // スキルの詳細情報を入力するtextarea
+    let skillDetailsText = $('#skill-details-text');
 
     // -------------------------------------------
     // -------- ここまで要素系変数の初期化 --------
@@ -53,10 +61,17 @@ $(document).ready(function () {
     // -------- ここから処理関係 --------
     // ----------------------------------
 
+    // 制作物のタイトル情報のみ抜き出して配列に入れる
+    productionTitleArray = [];
+    for(let i = 0; i < productionData.length; i++){
+        productionTitleArray.push(productionData[i]['title']);
+    }
 
     // 制作物のタイトルのselectの選択肢を入力
-    productionTitleArray = productionTitleData.split(',');
+    // productionTitleArray = productionTitleData.split(',');
+    
     productionTitleArray.push('新規');
+
     // console.log(productionTitleArray);
     for(let i = 0; i < productionTitleArray.length; i++){
         let productionTitle = productionTitleArray[i];
@@ -95,16 +110,18 @@ $(document).ready(function () {
         // マークダウンをHTMLに変換してプレビューに表示
         productionDetailsPreviewDiv.html(marked(value));
 
-        // productionDetailsPreviewDiv.innerHTML = marked(value);
-        // if(productionDetailsPreviewDiv.children().length != 0){
-        //     productionDetailsPreviewDiv.children()[0].remove();
-        // }
-        // productionDetailsPreviewDiv.append(marked(value));
     });
 
 
+    // スキルの言語データのみを抽出して配列にセット
+    let languageArray = [];
+    for(let i = 0; i < skillData.length; i++){
+        languageArray.push(skillData[i]['skill_name']);
+    }
+
+
     // スキルレベルの言語の選択肢を設定
-    let languageArray = languageData.split(',');
+    // let languageArray = languageData.split(',');
     languageArray.push('新規');
 
     for (let i = 0; i < languageArray.length; i++) {
@@ -121,13 +138,33 @@ $(document).ready(function () {
         if(value == '新規'){
             skillNameText.css('display', 'inline');
         }else{
+
+            for(let i = 0; i < skillData.length; i++){
+                if(skillData[i]['skill_name'] == value){
+                    skillLevelSelect.val(skillData[i]['skill_level']);
+                    skillKindSelect.val(skillData[i]['skill_kind']);
+                    skillDetailsText.val(skillData[i]['skill_details']);
+                    skillDetailsPreviewDiv.html(marked(skillData[i]['skill_details']));
+                    // console.log(skillData[i]['skill_kind']);
+                }
+
+            }
+
             skillNameText.css('display', 'none');
         }
     });
 
-    // スキルの種類の選択肢を設定
-    let kindArray = kindData.split(',');
+    // スキルの種類情報のみを抽出してセット
+    let kindArray = [];
+    for(let i = 0; i < skillData.length; i++){
+        if(kindArray.indexOf(skillData[i]['skill_kind']) == -1){
+            kindArray.push(skillData[i]['skill_kind']);
+        }
+    }
     kindArray.push('新規');
+
+    // スキルの種類の選択肢を設定
+    // let kindArray = kindData.split(',');
 
     for (let i = 0; i < kindArray.length; i++) {
 
@@ -135,7 +172,7 @@ $(document).ready(function () {
         skillKindSelect.append('<option value="' + kind + '">' + kind + '</option>')
     }
 
-    // スキルの種類でその他が選択されたときの挙動を設定
+    // スキルの種類で新規が選択されたときの挙動を設定
     skillKindSelect.change(function(e){
         let value = $(this).val();
 
@@ -144,6 +181,17 @@ $(document).ready(function () {
         }else{
             skillKindText.css('display', 'none');
         }
+    });
+
+    
+    // スキルの詳細情報が入力されたときの挙動を設定
+    skillDetailsText.change(function(){
+        let value = $(this).val();
+        // console.log('textarea change : ' + value);
+
+        // マークダウンをHTMLに変換してプレビューに表示
+        skillDetailsPreviewDiv.html(marked(value));
+
     });
 
     document.productionForm.reset();

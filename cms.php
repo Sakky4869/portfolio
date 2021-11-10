@@ -82,8 +82,40 @@ if (isset($_POST['section'])) {
         // }
 
         // $msg = $production_title . ' ' . $production_description . ' ' . $production_movie . 'insert production data';
-    }else if($_POST['section'] == 'skills'){
-        
+    }
+    
+    // スキル情報だった場合
+    if($_POST['section'] == 'skills'){
+
+        // スキルの言語名取得
+        $skill_language = $_POST['skill-name'];
+
+        // スキルレベル取得
+        $skill_level = '';
+        if(isset($_POST['skill-level'])){
+            $skill_level = $_POST['skill-level'];
+        }
+
+        // スキルの種類取得
+        $skill_kind = '';
+        if(isset($_POST['skill-kind'])){
+            $skill_kind = $_POST['skill-kind'];
+        }
+
+        // スキルの詳細情報取得
+        $skill_details = '';
+        if(isset($_POST['skill-details'])){
+            $skill_details = $_POST['skill-details'];
+        }
+
+        // 新規のスキル情報の場合は，insert
+        if($skill_language == '新規'){
+            $skill_language = $_POST['skill-name-text'];
+            insert_skill_data(connect_to_db($db_user, $db_passwd, $db_name), $skill_language, $skill_level, $skill_kind, $skill_details);
+        }else{
+            update_skill_data(connect_to_db($db_user, $db_passwd, $db_name), $skill_language, $skill_level, $skill_kind, $skill_details);
+        }
+
     }
 }else{
     // $msg = 'post data none';
@@ -100,20 +132,23 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 $production_datas = get_production_datas(connect_to_db($db_user, $db_passwd, $db_name));
 $production_datas_string = json_encode($production_datas, JSON_UNESCAPED_UNICODE);
 
-$production_title_datas = get_production_title_datas((connect_to_db($db_user, $db_passwd, $db_name)));
+$skill_datas = get_skill_datas(connect_to_db($db_user, $db_passwd, $db_name));
+$skill_datas_string = json_encode($skill_datas, JSON_UNESCAPED_UNICODE);
+
+// $production_title_datas = get_production_title_datas((connect_to_db($db_user, $db_passwd, $db_name)));
 // var_dump($production_title_datas);
 
-$production_title_datas_string = implode(',', $production_title_datas);
+// $production_title_datas_string = implode(',', $production_title_datas);
 
 // echo $production_datas_string . '<br>';
 
-$language_datas_array = get_language_datas(connect_to_db($db_user, $db_passwd, $db_name));
-$language_datas_string = implode(",", $language_datas_array);
+// $language_datas_array = get_language_datas(connect_to_db($db_user, $db_passwd, $db_name));
+// $language_datas_string = implode(",", $language_datas_array);
 
 // echo $language_datas_string . '<br>';
 
-$kind_datas_array = get_kind_datas(connect_to_db($db_user, $db_passwd, $db_name));
-$kind_datas_string = implode(",", $kind_datas_array);
+// $kind_datas_array = get_kind_datas(connect_to_db($db_user, $db_passwd, $db_name));
+// $kind_datas_string = implode(",", $kind_datas_array);
 
 // echo $kind_datas_string;
 
@@ -147,17 +182,22 @@ $kind_datas_string = implode(",", $kind_datas_array);
         // 
 
         // 制作物のタイトルデータのみを取得
-        let productionTitleData = '<?php echo $production_title_datas_string; ?>';
+        // let productionTitleData = '<?php //echo $production_title_datas_string; ?>';
         // console.log(productionTitleData);
         // console.log(productionData);
         // console.log(productionData[0]['title']);
 
+        // スキルデータを取得
+        let skillData = <?php echo $skill_datas_string; ?>;
+        // console.log(skillData);
+
         // スキルの言語データを文字列として取得
-        let languageData = <?php echo'"' . $language_datas_string . '"'; ?>;
+        // let languageData = <?php //echo'"' . $language_datas_string . '"'; ?>;
         // console.log(languageData);
     
         // スキルの種類データを文字列として取得
-        let kindData = <?php echo '"' . $kind_datas_string . '"'; ?>;
+        // let kindData = <?php //echo '"' . $kind_datas_string . '"'; ?>;
+        // console.log(kindData);
 
         // console.log('<?php echo $msg; ?>');
     </script>
@@ -259,23 +299,29 @@ $kind_datas_string = implode(",", $kind_datas_array);
                         <input type="hidden" name="section" value="productions">
                         <div class="form-group">
                             <label for="production-title">制作物タイトル</label>
+                            <!-- タイトルを選択するselect -->
                             <select required class="custom-select" name="production-title" id="production-title-select"></select>
+                            <!-- その他が選択されたときに記入するinput -->
                             <input type="text" class="form-control" name="production-title-text" id="production-title-text">
                         </div>
                         <div class="form-group">
                             <label for="production-description">制作物の概要</label>
+                            <!-- 制作物の概要を入力するtextarea -->
                             <textarea class="form-control" name="production-description" id="production-description-text"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="production-movie">制作物の動画のURL</label>
+                            <!-- 制作物の動画のURLを入力するinput -->
                             <input type="text" class="form-control" name="production-movie" id="production-movie-text">
                         </div>
                         <div class="form-group">
                             <label for="production-details-preview">制作物の詳細情報のプレビュー</label>
+                            <!-- 制作物の詳細情報のプレビュー -->
                             <div id="production-details-preview-div"></div>
                         </div>
                         <div class="form-group">
                             <label for="production-details">制作物の詳細情報</label>
+                            <!-- 制作物の詳細情報を入力するtextarea -->
                             <textarea class="form-control" name="production-details" id="production-details-text" cols="30" rows="10"></textarea>
                         </div>
                         <div class="form-group">
@@ -317,11 +363,14 @@ $kind_datas_string = implode(",", $kind_datas_array);
                         <input type="hidden" name="section" value="skills">
                         <div class="form-group">
                             <label for="skill-name">言語名</label>
+                            <!-- スキルの言語名を選択するselect -->
                             <select class="custom-select" name="skill-name" id="skill-name-select"></select>
+                            <!-- スキルでその他が選択されたときに，言語名を入力するinput -->
                             <input type="text" class="form-control" name="skill-name-text" id="skill-name-text">
                         </div>
                         <div class="form-group">
                             <label for="skill-level">スキルレベル</label>
+                            <!-- スキルレベルを選択するselect -->
                             <select class="custom-select" name="skill-level" id="skill-level-select">
                                 <option value="5">５：調べなくてもある程度作れる</option>
                                 <option value="4">４：調べながらなんか作れる</option>
@@ -332,8 +381,20 @@ $kind_datas_string = implode(",", $kind_datas_array);
                         </div>
                         <div class="form-group">
                             <label for="skill-kind">種類</label>
+                            <!-- スキルの種類を選択するselect -->
                             <select class="custom-select" name="skill-kind" id="skill-kind-select"></select>
-                            <input type="text" class="form-control" name="skill-kind" id="skill-kind-text">
+                            <!-- スキルの種類でその他が選択されたときに入力するinput -->
+                            <input type="text" class="form-control" name="skill-kind-text" id="skill-kind-text">
+                        </div>
+                        <div class="form-group">
+                            <label for="skill-details-preview">スキルの詳細情報のプレビュー</label>
+                            <!-- スキルの詳細情報のプレビューを表示するdiv -->
+                            <div id="skill-details-preview-div"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="skill-details">スキルの詳細情報</label>
+                            <!-- スキルの詳細情報を入力するtextarea -->
+                            <textarea class="form-control" name="skill-details" id="skill-details-text" cols="30" rows="10"></textarea>
                         </div>
                         <div class="form-group">
                             <input type="submit" class="btn btn-dark">
