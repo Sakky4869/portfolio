@@ -1,5 +1,5 @@
 <?php
-ini_set('display_errors', 1);
+ini_set('display_errors', 0);
 require_once './php/database_interface.php';
 $production_datas = get_production_datas(connect_to_db($db_user, $db_passwd, $db_name));
 $production_datas_string = json_encode($production_datas, JSON_UNESCAPED_UNICODE);
@@ -336,10 +336,21 @@ $skills_json = get_skill_datas_json_for_chart(connect_to_db($db_user, $db_passwd
 
         <div class="caption-message">
 
-            <p>このサイトおよび僕自身についてです</p>
-            <p>現在準備中です</p>
-            <p>1週間ほどお待ちください</p>
+            <p>本ポートフォリオのシステム構成図を</p>
+            <p>下記に掲載しました．</p>
+            <p>サーバは研究室のApacheサーバを使い，</p>
+            <p>データベースはMySQLを利用しています．</p>
+            <p>CMSをHTML, CSS, JavaScript, PHPで自作し，</p>
+            <p>情報を更新しやすいようにしました．</p>
+            <p>本ページはHTMLをベースに，</p>
+            <p>でコンテンツを生成しています．</p>
+            <br>
+            <p>フレームワーク・ライブラリについて</p>
+            <p>CSS：Bootstrap 4（UI作成に利用）</p>
+            <p>JavaScript：Marked.js（グラフ描画に利用）</p>
 
+
+            <img class="description-image" src="./image/system_architecture.svg" alt="システム構成図">
         </div>
     </div>
 
